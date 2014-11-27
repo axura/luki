@@ -1,12 +1,25 @@
 /*simple crc algorithm function testing
 this file was created on 27/11/2014
+compile with "gcc -Wall -Werror crctest.c -std=c99"
 got the function from
 http://www.barrgroup.com/Embedded-Systems/How-To/CRC-Calculation-C-Code
 */
+#include<stdio.h>
+#include<stdint.h>
 
 #define POLYNOMIAL 0xD8  /* 11011 followed by 0's */
 
-uint8_t crcNaive(uint8_t const message){
+
+uint8_t crcNaive(uint8_t message);
+
+int main (int argc, char *argv[]){
+//    uint8_t const message = argv[1];
+
+    return 0;
+
+}
+
+uint8_t crcNaive(uint8_t message){
     uint8_t  remainder;	
 
 
