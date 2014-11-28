@@ -17,9 +17,12 @@ int main (int argc, char *argv[]){
     uint8_t message = 0xff;
     uint8_t result;
     
+    scanf("%2hhx\n", &message);
+    printf("message %d\n", message);
+    
     result = crcNaive(message);
     
-    printf("%d\n", result);
+    printf("crcNaive result: %d\n", result);
 
     return 0;
 
