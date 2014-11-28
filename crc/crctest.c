@@ -13,7 +13,13 @@ http://www.barrgroup.com/Embedded-Systems/How-To/CRC-Calculation-C-Code
 uint8_t crcNaive(uint8_t message);
 
 int main (int argc, char *argv[]){
-//    uint8_t const message = argv[1];
+
+    uint8_t message = 0xff;
+    uint8_t result;
+    
+    result = crcNaive(message);
+    
+    printf("%d\n", result);
 
     return 0;
 
@@ -21,7 +27,6 @@ int main (int argc, char *argv[]){
 
 uint8_t crcNaive(uint8_t message){
     uint8_t  remainder;	
-
 
     /*
      * Initially, the dividend is the remainder.
