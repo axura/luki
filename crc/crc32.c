@@ -13,7 +13,7 @@ it would take about 6 + 46n instructions. */
 unsigned int crc32b(unsigned char *message);
 
 int main (void){
-    unsigned char message = 0xff;
+    unsigned char message = 0xfe;
     printf("message: %d\n",(int) message);
     
     unsigned int result;
