@@ -13,7 +13,7 @@ it would take about 6 + 46n instructions. */
 unsigned int crc32b(unsigned char *message);
 
 int main (void){
-    unsigned char message = 0xfe;
+    unsigned char message = 0b11111110;
     printf("message: %d\n",(int) message);
     
     unsigned int result;
@@ -27,7 +27,7 @@ unsigned int crc32b(unsigned char *message) {
    int i, j;
    unsigned int byte, crc, mask;
 
-   i = 0;
+   i = 0; 
    crc = 0xFFFFFFFF;
    while (message[i] != 0) {
       byte = message[i];            // Get next byte.
