@@ -3,29 +3,52 @@ this file was created on 27/11/2014
 compile with "gcc -Wall -Werror crctest.c -std=c99"
 got the function from
 http://www.barrgroup.com/Embedded-Systems/How-To/CRC-Calculation-C-Code
+made modifications accordingly
 */
 #include<stdio.h>
+#include<ctype.h>
 #include<stdint.h>
 
 #define POLYNOMIAL 0xD8  /* 11011 followed by 0's */
-
+#define message_len 8
 
 uint8_t crcNaive(uint8_t message);
+uint8_t toBinary ( int* message );
 
-int main (int argc, char *argv[]){
+int main(void){
+    char ch;
+    int message[message_len];
+    int i = 0;
+    uint8_t sent;
+    uint8_t crc;
+    while (((ch = getchar()) != EOF) && (ch != '\n')){
+//        printf("%c\n",ch);
+//        ch = getchar();
+        message[i] = (int) (ch - '0');
+        i++;
+    }
 
-    uint8_t message = 0x01;
-    uint8_t result;
-//    uint8_t recieved;
-  
-    printf("message %04x\n", message);
+    for (i = 0; i < message_len; i++){
+        printf("index %d: %d\n", i, message[i]);
+    }
     
-    result = crcNaive(message);
+    sent = toBinary(message);
+    printf ("message: %04x\n", sent);
     
-    printf("crcNaive result: %04x\n", result);
+    crc = crcNaive( sent );
+    printf("crcNaive: %04x\n", crc);
 
     return 0;
+}
 
+uint8_t toBinary ( int* message ){
+    uint8_t binary_message = 0;
+    int i= 0;
+    for(i = 0; i < message_len; i++){
+        binary_message = (binary_message << 1) + message[0];
+    }
+    printf("hexadecimal value = %04x\n", binary_message);
+    return binary_message;
 }
 
 uint8_t crcNaive(uint8_t message){
