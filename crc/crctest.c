@@ -21,6 +21,7 @@ int main(void){
     int i = 0;
     uint8_t sent;
     uint8_t crc;
+    uint16_t receive;
     while (((ch = getchar()) != EOF) && (ch != '\n')){
 //        printf("%c\n",ch);
 //        ch = getchar();
@@ -33,10 +34,25 @@ int main(void){
     }
     
     sent = toBinary(message);
-    printf ("message: %04x\n", sent);
+    receive = sent << message_len;
+    printf ("sent: %04x\n", sent);
     
     crc = crcNaive( sent );
     printf("crcNaive: %04x\n", crc);
+    
+    receive += crc;
+    sent = receive;
+    
+    //altering recieve to check that they are different
+    receive ^= 1;
+    
+    printf("received: %04x\n", receive);
+    
+    if (receive ^ sent){
+        printf("error detected\n");
+    } else {
+        printf("no error detected\n");
+    }
 
     return 0;
 }
@@ -45,7 +61,8 @@ uint8_t toBinary ( int* message ){
     uint8_t binary_message = 0;
     int i= 0;
     for(i = 0; i < message_len; i++){
-        binary_message = (binary_message << 1) + message[0];
+        binary_message = (binary_message << 1) + message[i];
+        printf("%d\n", binary_message);
     }
     printf("hexadecimal value = %04x\n", binary_message);
     return binary_message;
