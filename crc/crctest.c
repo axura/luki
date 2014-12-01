@@ -8,6 +8,7 @@ made modifications accordingly
 #include<stdio.h>
 #include<ctype.h>
 #include<stdint.h>
+#include<string.h>
 
 #define POLYNOMIAL 0xD8  /* 11011 followed by 0's */
 #define message_len 8
@@ -15,47 +16,47 @@ made modifications accordingly
 uint8_t crcNaive(uint8_t message);
 uint8_t toBinary ( int* message );
 
-int main(void){
-    char ch;
+int main(int argc, char *argv[]){
     int message[message_len];
     int i = 0;
     uint8_t sent;
+    uint16_t sent_code;
     uint8_t crc;
     uint16_t receive;
-    while (((ch = getchar()) != EOF) && (ch != '\n')){
-//        printf("%c\n",ch);
-//        ch = getchar();
-        message[i] = (int) (ch - '0');
-        i++;
-    }
+
+    printf("input: %s\n", argv[1]);
 
     for (i = 0; i < message_len; i++){
+        printf("input from command line: %c\n", argv[1][i]);
+        message[i] = ((int) argv[1][i]) - '0';
         printf("index %d: %d\n", i, message[i]);
     }
     
     sent = toBinary(message);
     receive = sent << message_len;
-    printf ("sent: %04x\n", sent);
+    printf ("message: %04x\n", sent);
     
     crc = crcNaive( sent );
     printf("crcNaive: %04x\n", crc);
     
     receive += crc;
-    sent = receive;
+    sent_code = receive;
     
     //altering recieve to check that they are different
     receive ^= 1;
-    
+
+    printf("sent: %04x\n", sent_code);
     printf("received: %04x\n", receive);
     
-    if (receive ^ sent){
-        printf("error detected\n");
-    } else {
+    if ((receive ^ sent_code) == 0){
         printf("no error detected\n");
+    } else {
+        printf("error detected\n");
     }
 
     return 0;
 }
+
 
 uint8_t toBinary ( int* message ){
     uint8_t binary_message = 0;
