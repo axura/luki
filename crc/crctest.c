@@ -14,14 +14,15 @@ uint8_t crcNaive(uint8_t message);
 
 int main (int argc, char *argv[]){
 
-    uint8_t message = 0xfe;
+    uint8_t message = 0x01;
     uint8_t result;
+//    uint8_t recieved;
   
-    printf("message %d\n", message);
+    printf("message %04x\n", message);
     
     result = crcNaive(message);
     
-    printf("crcNaive result: %d\n", result);
+    printf("crcNaive result: %04x\n", result);
 
     return 0;
 

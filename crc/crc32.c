@@ -29,7 +29,7 @@ unsigned int crc32b(unsigned char *message) {
 
    i = 0; 
    crc = 0xFFFFFFFF;
-   while (message[i] != 0) {
+   while (message[i] != 0) { 
       byte = message[i];            // Get next byte.
       crc = crc ^ byte;
       for (j = 7; j >= 0; j--) {    // Do eight times.
