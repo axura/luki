@@ -13,9 +13,19 @@ made modifications accordingly
 #define POLYNOMIAL 0xD8  /* 11011 followed by 0's */
 #define message_len 8
 
+//function prototypes
 uint8_t crcNaive(uint8_t message);
 uint8_t toBinary ( int* message );
 
+/*main program function. takes in the 8-bit binary input from the command line as a string. 
+Converts it to uint8_t type, and then passes into the CRC algorithm to find the remainder. This is appended to the "sent" message
+There is a block under a commented section where the "receive" message is intentionally modified, to model when errors have occured during transaction.
+variables declared
+sent: contains the message bitwise, and with the crc initial appended at the end
+recieve: contains the crc result of the sent variable
+
+if the result from the crc operation on receive variable is zero, then it is error-free.
+*/
 int main(int argc, char *argv[]){
     int message[message_len];
     int i = 0;
@@ -57,7 +67,7 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-
+//used to convert the input from command line into binary bits
 uint8_t toBinary ( int* message ){
     uint8_t binary_message = 0;
     int i= 0;
@@ -69,6 +79,7 @@ uint8_t toBinary ( int* message ){
     return binary_message;
 }
 
+//naive version of the crc algorithm
 uint8_t crcNaive(uint8_t message){
     uint8_t  remainder;	
 
