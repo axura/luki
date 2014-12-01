@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
     crc = crcNaive( sent );
     printf("crcNaive: %04x\n", crc);
     
-    receive += crc;
+    receive = crc;
     sent_code = receive;
     
     //altering recieve to check that they are different
