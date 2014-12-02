@@ -9,15 +9,12 @@
 #define p2_index 1
 #define p4_index 3
 #define p8_index 7
-#define p1 1
-#define p2 2
-#define p4 4
-#define p8 8
 
 int findParityS ( int *message, int p_index, int p_value);
 
 int main (void){
-    int message[] = {1,1,1,1,1,1,1,0};
+//    int message[] = {1,1,1,1,1,1,1,0};
+    int message[] = {1,1,0,1,0,1,0,1};
     int sent[message_len];
     int i;
     int j = 0;
@@ -32,7 +29,7 @@ int main (void){
     for (i = 0; i < message_len; i++){
         switch(i){
             case p1_index:
-                sent[p1_index] = findParityS( message, p1_index, p1);
+                sent[p1_index] = -1;
                 break;
             case p2_index:
                 sent[p2_index] = -1;
@@ -61,8 +58,17 @@ int main (void){
                 break;
         
         }
-
     }
+    
+    //finding the parity bits
+    sent[p1_index] = findParityS( sent, p1_index, 1 );
+    printf("p1: %d\n", sent[p1_index]);
+    sent[p2_index] = findParityS( sent, p2_index, 2 );
+    printf("p2: %d\n", sent[p2_index]);
+    sent[p4_index] = findParityS( sent, p4_index, 4 );
+    printf("p4: %d\n", sent[p4_index]);
+    sent[p8_index] = findParityS( sent, p8_index, 8 );
+    printf("p8: %d\n", sent[p8_index]);
     
     //printing the sent message.
     printf("sent code: [");
@@ -81,6 +87,7 @@ int findParityS ( int *message, int p_index, int p_value){
     int j;
     i = p_index; //start from the index given
     while ( i < check_len ){
+        printf("index: %d\n", i);
         for (j = p_value; j > 0; j--){
             if ( i >= check_len ){
                 break;
@@ -91,9 +98,13 @@ int findParityS ( int *message, int p_index, int p_value){
             i++;
         }
         //skip the number of bits
-        i--;
+        printf("EvenParityCount: %d\n", EvenParityCount);
         i += p_value; 
     }
     
-    return 0;
+    if (EvenParityCount % 2 == 0){
+        return 0;
+    } else {
+        return 1;
+    }
 }
