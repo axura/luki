@@ -14,31 +14,54 @@ int main (void){
     int sent[message_len];
     int i;
     int j = 0;
-    for (i = 0; i+j < message_len; i++){        
-        switch(i+j){
+    
+    printf("message: ");
+    for( i=0; i< input_len; i++){
+        printf("%d", message[i]);
+    }
+    printf("\n");
+    
+    
+    for (i = 0; i < message_len; i++){
+        switch(i){
             case p1_index:
                 sent[p1_index] = 0;
-                j++;
+                break;
             case p2_index:
                 sent[p2_index] = 0;
-                j++;
+                break;
             case p4_index:
-                sent[p1_index] = 0;
-                j++;
+                sent[p4_index] = 0;
+                break;
             case p8_index:
-                sent[p1_index] = 0;
-                j++;
+                sent[p8_index] = 0;
+                break;
             case 12:
-                //case that it has reached the last four bits. 
-                sent[12] = 0;
-                sent[13] = 0;
-                sent[14] = 0;
-                sent[15] = 0;
+                sent[i] = 0;
+                break;
+            case 13:
+                sent[i] = 0;
+                break;
+            case 14:
+                sent[i] = 0;
+                break;
+            case 15:
+                sent[i] = 0;
+                break;
             default:
-                sent[i+j] = message[i];
+                sent[i] = message[j];
+                j++;
+                break;
         
         }
+
     }
     
+    //printing the sent message.
+    printf("sent code: [");
+    for(i = 0; i < message_len; i++){
+        printf("%d,", sent[i]);
+    }
+    printf("]\n");
     return 0;
 }
