@@ -37,3 +37,9 @@ uint8_t toBinary ( int* message ){
     printf("hexadecimal value = %04x\n", binary_message);
     return binary_message;
 }
+
+//function to learn to use switch function
+void usingSwitch (void) {
+    
+
+}
