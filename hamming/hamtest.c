@@ -19,6 +19,7 @@ uint16_t toBinary ( int* message );
 uint16_t insertParity ( int* message );
 int findParityS ( int *message, int p_index, int p_value);
 void binToArr (uint16_t message, int* array);
+int checkError ( int *message );
 
 int main (int argc, char* argv[]){
     int input[input_len]; 
@@ -26,7 +27,6 @@ int main (int argc, char* argv[]){
     uint16_t recieve;
     int recieve_arr[message_len] = {0};
     int i;
-//    uint16_t sent;  
 
     for (i = 0; i < input_len; i++){
 //        printf("input from command line: %c\n", argv[1][i]);
@@ -39,8 +39,9 @@ int main (int argc, char* argv[]){
     
     //transmition of recieve
     recieve = sent;
-    recieve ^= 0x10;
-    
+//    recieve ^= 0x10;
+//    recieve ^= 0x2000;  
+
     //checking recieve
     binToArr (recieve, recieve_arr);
     
@@ -49,6 +50,12 @@ int main (int argc, char* argv[]){
         printf("%d,", recieve_arr[i]);
     } 
     printf("]\n");
+    
+    if (checkError (recieve_arr) == 1){
+        printf("error detected\n");
+    } else {
+        printf("no error detected\n");
+    }
 
     return 0;
 }
@@ -118,12 +125,7 @@ uint16_t insertParity (int* message ){
     sent[p2_index] = findParityS( sent, p2_index, 2 );
     sent[p4_index] = findParityS( sent, p4_index, 4 );
     sent[p8_index] = findParityS( sent, p8_index, 8 );    
-/*
-    printf("p1: %d\n", sent[p1_index]);
-    printf("p2: %d\n", sent[p2_index]);
-    printf("p4: %d\n", sent[p4_index]);
-    printf("p8: %d\n", sent[p8_index]);
-*/
+
     //printing the sent message.
     printf("sent code: [");
     for(i = 0; i < message_len; i++){
@@ -143,6 +145,24 @@ uint16_t toBinary ( int* message ){
     return binary_message;
 }
 
+int checkError ( int *message ){
+    int p1, p2, p4, p8;
+    p1 = findParityS( message, p1_index, 1);
+    p2 = findParityS( message, p2_index, 2);
+    p4 = findParityS( message, p4_index, 4);
+    p8 = findParityS( message, p8_index, 8);
+
+    printf("p1: %d\n", p1);
+    printf("p2: %d\n", p2);
+    printf("p4: %d\n", p4);
+    printf("p8: %d\n", p8);
+    
+    if (p1 == 1 || p2 == 1 || p4 == 1 || p8 == 1){
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
 int findParityS ( int *message, int p_index, int p_value){
     int EvenParityCount = 0;
