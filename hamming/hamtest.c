@@ -18,12 +18,13 @@ for 8 bit messages.
 uint16_t toBinary ( int* message );
 uint16_t insertParity ( int* message );
 int findParityS ( int *message, int p_index, int p_value);
+void binToArr (uint16_t message, int* array);
 
 int main (int argc, char* argv[]){
     int input[input_len]; 
     uint16_t sent;
     uint16_t recieve;
-    int recieve_arr[message_len];
+    int recieve_arr[message_len] = {0};
     int i;
 //    uint16_t sent;  
 
@@ -34,13 +35,42 @@ int main (int argc, char* argv[]){
     }
 
     sent = insertParity( input );
-    printf("%04x\n",sent);
+//    printf("%04x\n",sent);
     
+    //transmition of recieve
     recieve = sent;
+    recieve ^= 0x10;
     
+    //checking recieve
+    binToArr (recieve, recieve_arr);
     
+    printf("recieve_a: [");
+    for (i =0; i < message_len; i++){
+        printf("%d,", recieve_arr[i]);
+    } 
+    printf("]\n");
 
     return 0;
+}
+
+void binToArr (uint16_t message, int* array){
+    int i;
+    uint16_t mask = 0x8000;
+    uint16_t temp;
+    for( i=0; i< message_len; i++){
+//        printf("message: %04x\n",message);
+        temp = message & mask;
+        if (temp == 0){
+            array[i] = 0;
+        } else {
+            array[i] = 1;
+        }
+        
+        message = message << 1;
+//        printf("index: %d message: %04x temp: %04x\n", i, message, temp);
+    }
+
+    return;
 }
 
 uint16_t insertParity (int* message ){
@@ -109,7 +139,7 @@ uint16_t toBinary ( int* message ){
     for(i = 0; i < message_len; i++){
         binary_message = (binary_message << 1) + message[i];
     }
-    printf("hexadecimal value = %04x\n", binary_message);
+//    printf("hexadecimal value = %04x\n", binary_message);
     return binary_message;
 }
 
