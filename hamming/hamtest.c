@@ -1,7 +1,7 @@
 /*testing code version 1 for hamming algorithm. 
 made by Yue (Alice) Kang 1/12/2014 (Monday)
 for 8 bit messages. 
-
+The format of the sent messages is in 16 bits, as there are parity bits inserted.
 */
 #include<stdio.h>
 #include<stdint.h>
@@ -19,7 +19,7 @@ uint16_t toBinary ( int* message );
 uint16_t insertParity ( int* message );
 int findParityS ( int *message, int p_index, int p_value);
 void binToArr (uint16_t message, int* array);
-int checkError ( int *message );
+int checkError ( uint16_t recieve );
 
 int main (int argc, char* argv[]){
     int input[input_len]; 
@@ -40,18 +40,16 @@ int main (int argc, char* argv[]){
     //transmition of recieve
     recieve = sent;
 //    recieve ^= 0x10;
-//    recieve ^= 0x2000;  
+    recieve ^= 0x2000;  
 
     //checking recieve
-    binToArr (recieve, recieve_arr);
-    
     printf("recieve_a: [");
     for (i =0; i < message_len; i++){
         printf("%d,", recieve_arr[i]);
     } 
     printf("]\n");
     
-    if (checkError (recieve_arr) == 1){
+    if (checkError (recieve) == 1){
         printf("error detected\n");
     } else {
         printf("no error detected\n");
@@ -60,12 +58,12 @@ int main (int argc, char* argv[]){
     return 0;
 }
 
+//converts the message from binary bit into an array.
 void binToArr (uint16_t message, int* array){
     int i;
     uint16_t mask = 0x8000;
     uint16_t temp;
     for( i=0; i< message_len; i++){
-//        printf("message: %04x\n",message);
         temp = message & mask;
         if (temp == 0){
             array[i] = 0;
@@ -80,8 +78,11 @@ void binToArr (uint16_t message, int* array){
     return;
 }
 
+/*
+inserts the values of the messages, and finds the parity bits and inserts them into an array together. After the parity bits are located, they are calculated. 
+The array is merged to a binary number again and returned. 
+*/
 uint16_t insertParity (int* message ){
-//    int message[] = {1,1,0,1,0,1,0,1};
     int sent[message_len];
     int i;
     int j = 0;
@@ -141,16 +142,29 @@ uint16_t toBinary ( int* message ){
     for(i = 0; i < message_len; i++){
         binary_message = (binary_message << 1) + message[i];
     }
-//    printf("hexadecimal value = %04x\n", binary_message);
     return binary_message;
 }
 
-int checkError ( int *message ){
+/*
+overall function for checking error. This doesn't do any error correction yet. 
+It is based on even parity configurations
+message is split into arrays again, and the parity bit values are found again. 
+Since using even parity, if any of the parity bit equals one there is an error. 
+return value: 
+0 - no error
+1 - error
+*/
+int checkError ( uint16_t recieve ){
     int p1, p2, p4, p8;
-    p1 = findParityS( message, p1_index, 1);
-    p2 = findParityS( message, p2_index, 2);
-    p4 = findParityS( message, p4_index, 4);
-    p8 = findParityS( message, p8_index, 8);
+    int recieve_arr[message_len] = {0};
+    
+    binToArr (recieve, recieve_arr);
+
+    
+    p1 = findParityS( recieve_arr, p1_index, 1);
+    p2 = findParityS( recieve_arr, p2_index, 2);
+    p4 = findParityS( recieve_arr, p4_index, 4);
+    p8 = findParityS( recieve_arr, p8_index, 8);
 
     printf("p1: %d\n", p1);
     printf("p2: %d\n", p2);
@@ -164,13 +178,24 @@ int checkError ( int *message ){
     }
 }
 
+/*
+Finds a single parity bit. 
+Arguments:
+message - the message in array form
+p_index - index of the parity bit in the array (from the #define table)
+p_value - the number of the parity bit (1, 2, 4 or 8)
+the while loop does the counting of the occurences of the value 1 appearing.
+The logic mostly is in according to the "skip-check-skip" method, where it will jump to the p_index first. 
+
+even parity configured, therefore returns 0 if there are even number of 1s.
+if there are odd number of 1's, will return a 1.
+*/
 int findParityS ( int *message, int p_index, int p_value){
     int EvenParityCount = 0;
     int i = 0;
     int j;
-    i = p_index; //start from the index given
+    i = p_index;
     while ( i < check_len ){
-//        printf("index: %d\n", i);
         for (j = p_value; j > 0; j--){
             if ( i >= check_len ){
                 break;
@@ -180,8 +205,6 @@ int findParityS ( int *message, int p_index, int p_value){
             }
             i++;
         }
-        //skip the number of bits
-//        printf("EvenParityCount: %d\n", EvenParityCount);
         i += p_value; 
     }
     
