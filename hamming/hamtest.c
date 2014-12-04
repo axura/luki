@@ -1,5 +1,5 @@
 /*testing code version 1 for hamming algorithm. 
-made by Yue (Alice) Kang 1/12/2014 (Monday)
+made by on 1/12/2014 (Monday)
 for 8 bit messages. 
 The format of the sent messages is in 16 bits, as there are parity bits inserted.
 */
