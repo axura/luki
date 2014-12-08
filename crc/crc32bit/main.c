@@ -8,14 +8,26 @@
 unsigned char toBinary ( unsigned char* message );
 
 int main (int argc, char *argv[]){
-    unsigned char message[byte_len];
+    unsigned char input[byte_len];
+    unsigned char message;
     int i;
-
-    for (i = 0; i < byte_len; i++){
-        printf("input from command line: %c\n", argv[1][i]);
-        message[i] = ((uint8_t) argv[1][i]) - '0';
-        printf("index %d: %d\n", i, message[i]);
-    }   
+    int j;  
+    int k=0;
+    
+    for (j = 0; j < input_len; j++){
+        for (i = 0; i < byte_len; i++){
+//            printf("input from command line: %c\n", argv[1][k]);
+            input[i] = ((uint8_t) argv[1][k]) - '0';
+//            printf("index %d: %d\n", i, input[i]);
+            k++;
+        }    
+        message = toBinary(input);
+    
+        printf("message = %04x\n",message);
+    }
+    
+    
+       
     return 0;
 }
 
