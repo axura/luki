@@ -7,7 +7,8 @@
 
 unsigned char toBinary ( unsigned char* message );
 void printMessage ( unsigned char * message );
-
+void printEntries ( void );
+/*
 int main (int argc, char *argv[]){
     unsigned char input[byte_len];
     unsigned char message[input_len];
@@ -44,6 +45,11 @@ int main (int argc, char *argv[]){
     }
        
     return 0;
+}*/
+
+int main (int argc, char *argv[]){
+    printEntries();
+    return 0;
 }
 
 void printMessage ( unsigned char * message ){
@@ -52,6 +58,17 @@ void printMessage ( unsigned char * message ){
         printf("message[%d] = %04x\n",j,message[j]);
     }
     
+    return;
+}
+
+void printEntries ( void ){
+    unsigned int i;
+    unsigned char message[1];
+    
+    for (i = 0; i <= max_entry; i++){
+        message[0] = i;
+        printf("%04x crc:%04x\n", i, crc32b(message));
+    }
     return;
 }
 
