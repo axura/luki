@@ -13,13 +13,9 @@ made modifications accordingly
 #define POLYNOMIAL 0xD8  /* 11011 followed by 0's */
 #define message_len 8
 
-#define error_1 0x1
-#define error_2 0x3
-#define error_3 0x7
-#define error_4 0x15
-#define error_5 0x31
-#define error_6 0x63
-#define error_7 0x127
+#define error_crc 0x01
+
+#define error_data 0x50
 
 //function prototypes
 uint8_t crcNaive(uint8_t message);
@@ -61,7 +57,7 @@ int main(int argc, char *argv[]){
     sent_code = receive;
     
     //altering recieve to check that they are different
-    receive ^= error_3;
+    receive ^= error_data;
 
     printf("sent message: %04x\n", sent_code);
     printf("received message: %04x\n", receive);
