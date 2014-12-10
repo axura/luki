@@ -52,19 +52,19 @@ int main(int argc, char *argv[]){
     
     sent = toBinary(message);
     receive = sent << message_len;
-    printf ("message: %04x\n", sent);
+    printf ("message intended: %04x\n", sent);
     
     crc = crcNaive( sent );
-    printf("crcNaive: %04x\n", crc);
+    printf("crcNaive of message: %04x\n", crc);
     
-    receive = crc;
+    receive += crc;
     sent_code = receive;
     
     //altering recieve to check that they are different
     receive ^= error_3;
 
-    printf("sent: %04x\n", sent_code);
-    printf("received: %04x\n", receive);
+    printf("sent message: %04x\n", sent_code);
+    printf("received message: %04x\n", receive);
     
     if ((receive ^ sent_code) == 0){
         printf("no error detected\n");
@@ -83,7 +83,7 @@ uint8_t toBinary ( int* message ){
         binary_message = (binary_message << 1) + message[i];
         printf("%d\n", binary_message);
     }
-    printf("hexadecimal value = %04x\n", binary_message);
+//    printf("hexadecimal value = %04x\n", binary_message);
     return binary_message;
 }
 
