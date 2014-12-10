@@ -6,10 +6,13 @@
 #define byte_len 8
 
 unsigned char toBinary ( unsigned char* message );
+void printMessage ( unsigned char * message );
 
 int main (int argc, char *argv[]){
     unsigned char input[byte_len];
-    unsigned char message;
+    unsigned char message[input_len];
+    unsigned char mask = 0b10000000;
+    unsigned int crcT, crcR;
     int i;
     int j;  
     int k=0;
@@ -21,14 +24,35 @@ int main (int argc, char *argv[]){
 //            printf("index %d: %d\n", i, input[i]);
             k++;
         }    
-        message = toBinary(input);
-    
-        printf("message = %04x\n",message);
+        message[j] = toBinary(input);
     }
+        
+    crcT = crc32b( message);
+    printf("transmitted message crc: %04x\n", crcT);
     
+    //change the message a bit;
+    message[2] ^= mask;
+    printf("recieved message\n");
     
+    crcR = crc32b( message);
+    printf("recieved message crc: %04x\n", crcR);
+
+    if (crcR != crcT){
+        printf("error detected\n");
+    } else {
+        printf("no error detected\n");
+    }
        
     return 0;
+}
+
+void printMessage ( unsigned char * message ){
+    int j;
+    for (j = 0; j < input_len; j++ ){
+        printf("message[%d] = %04x\n",j,message[j]);
+    }
+    
+    return;
 }
 
 unsigned char toBinary ( unsigned char* message ){
