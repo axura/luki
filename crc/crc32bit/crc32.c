@@ -10,6 +10,10 @@ it would take about 6 + 46n instructions. */
 #include<stdio.h>
 #include"crc32.h"
 
+#define no_of_entries_table 256
+
+unsigned int table[no_of_entries_table];
+
 unsigned int crc32b(unsigned char *message) {
    int i, j;
    unsigned int byte, crc, mask;
@@ -26,4 +30,16 @@ unsigned int crc32b(unsigned char *message) {
       i = i + 1;
    }
    return ~crc;
+}
+
+void createTable ( void ){
+    unsigned int i;
+    unsigned char message[1];
+    
+    for (i = 0; i <= max_entry; i++){
+        message[0] = i;
+        table[i] = crc32b(message);
+        printf("%04x crc:%04x\n", i, crc32b(message));
+    }
+    return;
 }

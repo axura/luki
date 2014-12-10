@@ -49,7 +49,7 @@ int main (int argc, char *argv[]){
 }*/
 
 int main (int argc, char *argv[]){
-    printEntriesR();
+    printEntries();
     return 0;
 }
 
