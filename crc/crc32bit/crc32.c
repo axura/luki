@@ -10,10 +10,6 @@ it would take about 6 + 46n instructions. */
 #include<stdio.h>
 #include"crc32.h"
 
-#define no_of_entries_table 256
-#define message_len_byte 4
-#define WIDTH 8*4  //size of the crc is 32 bit
-
 unsigned int crcTable[no_of_entries_table];
 
 unsigned int crc32b(unsigned char *message) {
@@ -53,8 +49,11 @@ unsigned int checksum( unsigned char *message){
     
     for(byte_i = 0; byte_i < message_len_byte; byte_i++){
         data = message[byte_i] ^ (total_checksum >> ( WIDTH - 8 ));
-        total_checksum = crcTable[message[data]] ^ (total_checksum << 8);
-        printf(" byte: %04x data: %04x crc: %04x\n", message[byte_i], data, crcTable[message[data]]);
+//        printf(" crc: %04x data: %04x\n", crcTable[message[byte_i]], data);
+//        printf("crcTable = %04x\n totaal_checksum << 8 = %04x\n", crcTable[data], (total_checksum << 8)); 
+        total_checksum = crcTable[data] ^ (total_checksum << 8);
+//        printf(" byte: %04x data: %04x crc: %04x\n", message[byte_i], data, crcTable[message[data]]);
+//        printf("total_checksum after = %04x\n", total_checksum);
     }
     return total_checksum;
 }

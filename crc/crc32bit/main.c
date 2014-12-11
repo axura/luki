@@ -56,6 +56,7 @@ int main (int argc, char *argv[]){
     unsigned char input[byte_len];
     unsigned char message[input_len];
     unsigned int crcT, crcR;
+    unsigned char temp;
     int i;
     int j;  
     int k=0;
@@ -75,10 +76,18 @@ int main (int argc, char *argv[]){
     printf("the transmitted checksum is %04x\n",crcT);
     
     //modifying sent message
-    //message[1] ^= 0x80;
-    crcT ^= 0x1;
+//    message[1] += 0xF;
+//    message[2] ^= 0x1;
+/*
+      temp = message[1];
+      message[1] = message[3];
+      message[3] = temp;
+*/
+
+    //crcT ^= 0x1;
     
     crcR = checksum( message );
+//    crcR ^= 0x1;
     
     printf("the recieved checksum is %04x\n",crcR);
     crcR ^= crcT;    
