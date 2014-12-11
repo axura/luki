@@ -49,7 +49,27 @@ int main (int argc, char *argv[]){
 }*/
 
 int main (int argc, char *argv[]){
-    printEntries();
+    unsigned char input[byte_len];
+    unsigned char message[input_len];
+    unsigned int crc;
+    int i;
+    int j;  
+    int k=0;
+    
+    for (j = 0; j < 4; j++){
+        for (i = 0; i < byte_len; i++){
+//            printf("input from command line: %c\n", argv[1][k]);
+            input[i] = ((uint8_t) argv[1][k]) - '0';
+//            printf("index %d: %d\n", i, input[i]);
+            k++;
+        }    
+        message[j] = toBinary(input);
+    }
+
+    createTable();
+    crc = checksum( message );
+    
+    printf("the final checksum is %04x\n",crc);
     return 0;
 }
 

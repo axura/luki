@@ -4,4 +4,4 @@
 
 unsigned int crc32b(unsigned char *message);
 void createTable ( void );
-
+unsigned int checksum( unsigned char *message);
