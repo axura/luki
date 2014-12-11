@@ -12,8 +12,9 @@ it would take about 6 + 46n instructions. */
 
 #define no_of_entries_table 256
 #define message_len_byte 4
+#define WIDTH 8*4  //size of the crc is 32 bit
 
-unsigned int table[no_of_entries_table];
+unsigned int crcTable[no_of_entries_table];
 
 unsigned int crc32b(unsigned char *message) {
    int i, j;
@@ -39,19 +40,21 @@ void createTable ( void ){
     
     for (i = 0; i <= max_entry; i++){
         message[0] = i;
-        table[i] = crc32b(message);
-//        printf("%04x crc:%04x\n", i, table[i]);
+        crcTable[i] = crc32b(message);
+//        printf("%04x crc:%04x\n", i, crcTable[i]);
     }
     return;
 }
 
 unsigned int checksum( unsigned char *message){
-    int i;
+    int byte_i;
+    unsigned char data;
     unsigned int total_checksum = 0;
     
-    for(i = 0; i < message_len_byte; i++){
-        total_checksum += table[message[i]];
-        printf("checksum of %04x is %04x\n", message[i], table[message[i]]);
+    for(byte_i = 0; byte_i < message_len_byte; byte_i++){
+        data = message[byte_i] ^ (total_checksum >> ( WIDTH - 8 ));
+        total_checksum = crcTable[message[data]] ^ (total_checksum << 8);
+        printf(" byte: %04x data: %04x crc: %04x\n", message[byte_i], data, crcTable[message[data]]);
     }
     return total_checksum;
 }

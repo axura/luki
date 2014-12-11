@@ -2,13 +2,17 @@
 #include<stdint.h>
 #include "crc32.c"
 
-#define input_len 28
+#define input_len 4
 #define byte_len 8
 
 unsigned char toBinary ( unsigned char* message );
 void printMessage ( unsigned char * message );
 void printEntries ( void );
 void printEntriesR (void);
+void toBinaryArr ( unsigned char* message );
+
+unsigned char binary_message[input_len];
+
 /*
 int main (int argc, char *argv[]){
     unsigned char input[byte_len];
@@ -51,12 +55,12 @@ int main (int argc, char *argv[]){
 int main (int argc, char *argv[]){
     unsigned char input[byte_len];
     unsigned char message[input_len];
-    unsigned int crc;
+    unsigned int crcT, crcR;
     int i;
     int j;  
     int k=0;
     
-    for (j = 0; j < 4; j++){
+    for (j = 0; j < input_len; j++){
         for (i = 0; i < byte_len; i++){
 //            printf("input from command line: %c\n", argv[1][k]);
             input[i] = ((uint8_t) argv[1][k]) - '0';
@@ -67,9 +71,23 @@ int main (int argc, char *argv[]){
     }
 
     createTable();
-    crc = checksum( message );
+    crcT = checksum( message );
+    printf("the transmitted checksum is %04x\n",crcT);
     
-    printf("the final checksum is %04x\n",crc);
+    //modifying sent message
+    //message[1] ^= 0x80;
+    crcT ^= 0x1;
+    
+    crcR = checksum( message );
+    
+    printf("the recieved checksum is %04x\n",crcR);
+    crcR ^= crcT;    
+    if (crcR != 0){
+        printf("error detected\n");
+    } else {
+        printf("no error\n");
+    }
+    
     return 0;
 }
 
@@ -117,4 +135,21 @@ unsigned char toBinary ( unsigned char* message ){
     }
 //    printf("hexadecimal value = %04x\n", binary_message);
     return binary_message;
+}
+
+void toBinaryArr ( unsigned char* message ){
+    unsigned char binary_message[input_len] = {0};
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    for (j = 0; j < input_len; j++){
+        for(i = 0; i < byte_len; i++){
+            binary_message[j] = (binary_message[j] << 1) + message[k];
+            k++;
+//            printf("%d\n", binary_message);
+        }
+        printf("binary message index %d: %04x\n", j, binary_message[j]);
+    }
+//    printf("hexadecimal value = %04x\n", binary_message);
+    return;
 }
