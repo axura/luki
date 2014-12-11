@@ -3,13 +3,14 @@
 #include "crc32.c"
 
 #define input_len 4
+#define full_message_len 8
 #define byte_len 8
 
 unsigned char toBinary ( unsigned char* message );
 void printMessage ( unsigned char * message );
 void printEntries ( void );
 void printEntriesR (void);
-void toBinaryArr ( unsigned char* message );
+void toBinaryArr ( unsigned char* message ,unsigned int crc32);
 
 unsigned char binary_message[input_len];
 
@@ -54,9 +55,9 @@ int main (int argc, char *argv[]){
 
 int main (int argc, char *argv[]){
     unsigned char input[byte_len];
-    unsigned char message[input_len];
+    unsigned char message[full_message_len];
     unsigned int crcT, crcR;
-    unsigned char temp;
+//    unsigned char temp;
     int i;
     int j;  
     int k=0;
@@ -70,9 +71,16 @@ int main (int argc, char *argv[]){
         }    
         message[j] = toBinary(input);
     }
+    
+    while (j < full_message_len){
+        message[j] = 0;
+        j++;
+    }
 
     createTable();
     crcT = checksum( message );
+    
+    toBinaryArr ( message, crcT );
     printf("the transmitted checksum is %04x\n",crcT);
     
     //modifying sent message
@@ -146,19 +154,19 @@ unsigned char toBinary ( unsigned char* message ){
     return binary_message;
 }
 
-void toBinaryArr ( unsigned char* message ){
-    unsigned char binary_message[input_len] = {0};
-    int i = 0;
+//appending in the crc bits
+void toBinaryArr ( unsigned char* message, unsigned int crc32 ){
+    int i;
     int j = 0;
-    int k = 0;
-    for (j = 0; j < input_len; j++){
-        for(i = 0; i < byte_len; i++){
-            binary_message[j] = (binary_message[j] << 1) + message[k];
-            k++;
-//            printf("%d\n", binary_message);
-        }
-        printf("binary message index %d: %04x\n", j, binary_message[j]);
+    unsigned char ch;
+    for(i = 1; i <= 4; i++){
+        ch = crc32 >> (WIDTH - 8*i);
+        message[input_len + j] = ch;
+        j++;
     }
-//    printf("hexadecimal value = %04x\n", binary_message);
+    
+    for(i=0; i < full_message_len; i++){
+        printf("message[%d]: %04x\n", i, message[i]);
+    }
     return;
 }
