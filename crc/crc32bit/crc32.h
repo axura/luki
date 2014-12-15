@@ -26,7 +26,7 @@ void createTable ( void );
 /*
 given an 8-bit array of data, the function will find the overall checksum. 
 It will find the individual checksum of each byte in the message array, before
-bitwise XOR with the total remainder.
+finding the total checksum.
 */
 unsigned int checksum( unsigned char *message);
 
