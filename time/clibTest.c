@@ -9,7 +9,7 @@ Test program for finding unix time.
 int main(void)
 {
     time_t current_time;
-    char* c_time_string;
+    //char* c_time_string;
  
     /* Obtain current time as seconds elapsed since the Epoch. */
     current_time = time(NULL);
@@ -18,9 +18,12 @@ int main(void)
     {
         (void) fprintf(stderr, "Failure to compute the current time.");
         return EXIT_FAILURE;
+    } else {
+        printf("%d seconds since the epoch began \n", (int) current_time);
     }
  
     /* Convert to local time format. */
+    /*
     c_time_string = ctime(&current_time);
  
     if (c_time_string == NULL)
@@ -28,8 +31,9 @@ int main(void)
         (void) fprintf(stderr, "Failure to convert the current time.");
         return EXIT_FAILURE;
     }
- 
+    */ 
     /* Print to stdout. */
-    (void) printf("Current time is %s", c_time_string);
+    //(void) printf("Current time is %s", c_time_string);
+    
     return EXIT_SUCCESS;
 }
