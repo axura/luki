@@ -19,7 +19,7 @@ int main(void)
         (void) fprintf(stderr, "Failure to compute the current time.");
         return EXIT_FAILURE;
     } else {
-        printf("%d seconds since the epoch began \n", (int) current_time);
+        printf("%llu seconds since the epoch began \n", (unsigned long long) current_time);
     }
  
     /* Convert to local time format. */
