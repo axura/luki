@@ -5,6 +5,11 @@ Test program for finding unix time.
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#define crc_size 4
+#define unix_time_size 7
+
+void toByteArr ( unsigned char* array, unsigned long long value , int array_size);
  
 int main(void)
 {
@@ -35,5 +40,36 @@ int main(void)
     /* Print to stdout. */
     //(void) printf("Current time is %s", c_time_string);
     
+    //testing toByteArr function using random value
+    unsigned long long test_int = 0x11DEADBEEF;
+    printf("test_int = %llx\n", test_int);
+    unsigned char test_array[unix_time_size]; //4 bytes long, this needs to be specified. 
+    toByteArr( test_array, test_int, unix_time_size);
+    
     return EXIT_SUCCESS;
 }
+
+//appending in the crc bits
+void toByteArr ( unsigned char* array, unsigned long long value , int array_size){
+    int i;
+    //int j = 0;
+    unsigned char ch;
+    
+    for( i = 0; i < array_size; i++){
+        ch = value >> (8*i); //little endian, taking in the least sig 8 bits first
+        array[i] = ch; 
+    }
+    
+    /*this was used previously in main.c for crc32 calculations
+    for(i = 1; i <= array_size; i++){
+        ch = value >> (value_bit_no - 8*i);
+        array[array_size + j] = ch;
+        j++;
+    }*/
+    
+    for(i=0; i < array_size; i++){
+        printf("message[%d]: %04x\n", i, array[i]);
+    }
+    return;
+}
+
