@@ -110,7 +110,7 @@ int main (int argc, char *argv[]){
 
 void printMessage ( unsigned char * message ){
     int j;
-    for (j = 0; j < input_len; j++ ){
+    for (j = 0; j < full_message_len; j++ ){
         printf("message[%d] = %04x\n",j,message[j]);
     }
     
