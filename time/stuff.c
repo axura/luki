@@ -13,13 +13,15 @@ Sorts everything into char arrays before adding in timestamp and crc.
 #define input_len 12 //input length in terms of bytes
 #define full_message_len 4
 #define ecc_byte_len 3
+#define ecc_len_byte 11
 
 void toByteArr ( unsigned char* array, unsigned long long value , int array_size);
 unsigned char toBinary ( unsigned char* message );
 uint8_t hexToChar (uint8_t high_word, uint8_t low_word);
 uint8_t findHex (uint8_t value);
 void removeZero ( uint8_t * input, uint8_t * ecc );
-void removeZeroNBytes ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind ,int noOfBytes);
+void removeZeroNBytes ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind ,int noOfBytes,int ecc_enter_bytes);
+void toByteArrN ( unsigned char* array, unsigned long long value , int start_ind, int array_size);
 
 int main (int argc, char *argv[]){
     unsigned char input[input_len];
@@ -40,13 +42,18 @@ int main (int argc, char *argv[]){
 }
 
 void removeZero ( uint8_t * input, uint8_t * ecc ){
-    removeZeroNBytes( input, ecc, 0, 0, 8);
-    removeZeroNBytes( input, ecc, 8, 8, 3);
+    int i;
+    removeZeroNBytes( input, ecc, 0, 0, 8, 5);
+    removeZeroNBytes( input, ecc, 8, 5, 3, 2);
+    
+    for (i = 0; i < ecc_len_byte; i++){
+        printf("ecc[%d] : %02x\n", i, ecc[i]);
+    }
     return;
 }
 
 //remove zero for 8 bytes. 
-void removeZeroNBytes ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind, int noOfBytes ){
+void removeZeroNBytes ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind, int noOfBytes, int ecc_enter_bytes ){
     int i;
     int k = 0;
     int j = ecc_ind;
@@ -57,8 +64,12 @@ void removeZeroNBytes ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_in
         temp = input[i];
         ecc_temp = ecc_temp | (temp << 5*k);
         printf("temp << k = %llx input = %02x: ecc_temp = %llx\n",temp << 5*k, input[i],  ecc_temp);
+        
         k++;
     }
+    
+    toByteArrN ( ecc, ecc_temp ,ecc_ind, ecc_enter_bytes);
+
     return;
 }
 
@@ -124,6 +135,22 @@ void toByteArr ( unsigned char* array, unsigned long long value , int array_size
     return;
 }
 
+void toByteArrN ( unsigned char* array, unsigned long long value ,int start_ind, int array_size){
+    int i;
+    int j = 0;
+    unsigned char ch;
+    
+    printf("hello\n");
+    
+    for( i = start_ind; i <(start_ind + array_size); i++){
+        ch = value >> (8*j); //little endian, taking in the least sig 8 bits first
+        j ++;
+        array[i] = ch; 
+        printf("message[%d]: %04x\n", i, array[i]);
+    }
+    
+    return;
+}
 
 /* scrapwork
    char ch; 
