@@ -19,7 +19,7 @@ unsigned char toBinary ( unsigned char* message );
 uint8_t hexToChar (uint8_t high_word, uint8_t low_word);
 uint8_t findHex (uint8_t value);
 void removeZero ( uint8_t * input, uint8_t * ecc );
-void removeZeroFive ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind );
+void removeZeroNBytes ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind ,int noOfBytes);
 
 int main (int argc, char *argv[]){
     unsigned char input[input_len];
@@ -40,20 +40,20 @@ int main (int argc, char *argv[]){
 }
 
 void removeZero ( uint8_t * input, uint8_t * ecc ){
-    removeZeroFive( input, ecc, 0, 0);
-
+    removeZeroNBytes( input, ecc, 0, 0, 8);
+    removeZeroNBytes( input, ecc, 8, 8, 3);
     return;
 }
 
-//remove zero for 5 bytes. 
-void removeZeroFive ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind ){
+//remove zero for 8 bytes. 
+void removeZeroNBytes ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind, int noOfBytes ){
     int i;
     int k = 0;
     int j = ecc_ind;
     unsigned long long ecc_temp = 0;
     unsigned long long temp;
     
-    for (i = input_ind; i < (input_ind + 8); i++){
+    for (i = input_ind; i < (input_ind + noOfBytes); i++){
         temp = input[i];
         ecc_temp = ecc_temp | (temp << 5*k);
         printf("temp << k = %llx input = %02x: ecc_temp = %llx\n",temp << 5*k, input[i],  ecc_temp);
@@ -61,6 +61,8 @@ void removeZeroFive ( uint8_t * input, uint8_t* ecc, int input_ind, int ecc_ind 
     }
     return;
 }
+
+
 
 
 uint8_t hexToChar (uint8_t high_word, uint8_t low_word){
