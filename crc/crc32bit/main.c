@@ -2,8 +2,8 @@
 #include<stdint.h>
 #include "crc32.c"
 
-#define input_len 4
-#define full_message_len 8
+#define input_len 28
+#define full_message_len 32
 #define byte_len 8
 
 unsigned char toBinary ( unsigned char* message );
