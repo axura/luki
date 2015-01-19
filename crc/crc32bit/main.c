@@ -61,7 +61,7 @@ int main (int argc, char *argv[]){
     int i;
     int j;  
     int k=0;
-    
+    /*
     for (j = 0; j < input_len; j++){
         for (i = 0; i < byte_len; i++){
 //            printf("input from command line: %c\n", argv[1][k]);
@@ -75,13 +75,13 @@ int main (int argc, char *argv[]){
     while (j < full_message_len){
         message[j] = 0;
         j++;
-    }
+    } */
 
     createTable();
-    crcT = checksum( message );
+    //crcT = checksum( message );
     
-    toBinaryArr ( message, crcT );
-    printf("the transmitted checksum is %04x\n",crcT);
+    //toBinaryArr ( message, crcT );
+    //printf("the transmitted checksum is %04x\n",crcT);
     
     //modifying sent message
 //    message[1] += 0xF;
@@ -94,9 +94,9 @@ int main (int argc, char *argv[]){
 
     //crcT ^= 0x1;
     
-    crcR = checksum( message );
+    //crcR = checksum( message );
 //    crcR ^= 0x1;
-    
+    /*
     printf("the recieved checksum is %04x\n",crcR);
     crcR ^= crcT;    
     if (crcR != 0){
@@ -104,13 +104,13 @@ int main (int argc, char *argv[]){
     } else {
         printf("no error\n");
     }
-    
+    */
     return 0;
 }
 
 void printMessage ( unsigned char * message ){
     int j;
-    for (j = 0; j < full_message_len; j++ ){
+    for (j = 0; j < input_len; j++ ){
         printf("message[%d] = %04x\n",j,message[j]);
     }
     
@@ -166,7 +166,7 @@ void toBinaryArr ( unsigned char* message, unsigned int crc32 ){
     }
     
     for(i=0; i < full_message_len; i++){
-        printf("message[%d]: %04x\n", i, message[i]);
+   //     printf("message[%d]: %04x\n", i, message[i]);
     }
     return;
 }
