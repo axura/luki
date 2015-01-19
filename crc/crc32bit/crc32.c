@@ -31,7 +31,6 @@ unsigned int checksum( unsigned char *message){
     for(byte_i = 0; byte_i < message_len_byte; byte_i++){
         data = message[byte_i] ^ (total_checksum >> ( WIDTH - 8 ));
         total_checksum = crcTable[data] ^ (total_checksum << 8);
-        printf("byte[%d]: %02x, checksum: %04x\n", byte_i, message[byte_i], total_checksum);
     }
     return total_checksum;
 }
@@ -49,9 +48,7 @@ unsigned int crc32b(unsigned char *message) {
       for (j = 7; j >= 0; j--) {    // Do eight times.
          mask = -(crc & 1);
          crc = (crc >> 1) ^ (0xEDB88320 & mask);
-         printf("\tcrc = %04x, mask = %04x\n", crc, mask); 
       }
-      printf("message[i] = %04x, crc = %04x\n",message[i], crc); 
       i = i + 1;
    }
    return ~crc;
