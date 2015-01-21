@@ -11,6 +11,7 @@ void printMessage ( unsigned char * message );
 void printEntries ( void );
 void printEntriesR (void);
 void toBinaryArr ( unsigned char* message ,unsigned int crc32);
+void concatArray ( unsigned char * arr1, unsigned char * arr2, int arr1_size, unsigned char* newArr, int total_size);
 
 unsigned char binary_message[input_len];
 
@@ -55,8 +56,10 @@ int main (int argc, char *argv[]){
 
 int main (int argc, char *argv[]){
     unsigned char input[byte_len];
-    unsigned char message[full_message_len];
+    unsigned char message[input_len];
+    unsigned char crc_arr[4];
     unsigned int crcT, crcR;
+    unsigned char store_message[full_message_len];
 //    unsigned char temp;
     int i;
     int j;  
@@ -80,9 +83,11 @@ int main (int argc, char *argv[]){
     createTable();
     crcT = checksum( message );
     
-    toBinaryArr ( message, crcT );
-    printf("the transmitted checksum is %04x\n",crcT);
+    toBinaryArr ( crc_arr, crcT );
     
+    printf("the transmitted checksum is %04x\n",crcT);
+    concatArray ( message,  crc_arr, input_len, store_message, full_message_len);
+
     //modifying sent message
 //    message[1] += 0xF;
 //    message[2] ^= 0x1;
@@ -94,16 +99,16 @@ int main (int argc, char *argv[]){
 
     //crcT ^= 0x1;
     
-    crcR = checksum( message );
+   // crcR = checksum( message );
 //    crcR ^= 0x1;
-    
+    /*
     printf("the recieved checksum is %04x\n",crcR);
     crcR ^= crcT;    
     if (crcR != 0){
         printf("error detected\n");
     } else {
         printf("no error\n");
-    }
+    }*/
     
     return 0;
 }
@@ -161,12 +166,28 @@ void toBinaryArr ( unsigned char* message, unsigned int crc32 ){
     unsigned char ch;
     for(i = 1; i <= 4; i++){
         ch = crc32 >> (WIDTH - 8*i);
-        message[input_len + j] = ch;
+        message[j] = ch;
         j++;
     }
     
     for(i=0; i < full_message_len; i++){
    //     printf("message[%d]: %04x\n", i, message[i]);
+    }
+    return;
+}
+
+void concatArray ( unsigned char * arr1, unsigned char * arr2, int arr1_size, unsigned char* newArr, int total_size){
+    int i;
+    int j = 0;
+    for ( i = 0; i < arr1_size; i++){
+        newArr[i] = arr1[i];
+        printf("new array[%d]: %04x from array 1\n", i, newArr[i]);
+    }
+    for ( i = arr1_size; i < total_size; i++){
+        newArr[i] = arr2[j];
+        printf("new array[%d]: %04x from array 2\n", i, newArr[i]);
+
+        j++;
     }
     return;
 }
