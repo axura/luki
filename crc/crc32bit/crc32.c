@@ -19,6 +19,7 @@ void createTable ( void ){
         message[0] = i;
         message[1] = 0;
         crcTable[i] = crc32b(message);
+        printf("byte[%02x]: %04x\n", i, crcTable[i]);
     }
     return;
 }
