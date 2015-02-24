@@ -23,6 +23,14 @@ void createTable ( void ){
     return;
 }
 
+unsigned int checksumByte( unsigned char *message, int start_ind, unsigned int total_checksum){
+    unsigned char data;
+    data = message[start_ind];
+    data = message[start_ind] ^ (total_checksum >> ( WIDTH - 8 ));
+    total_checksum = crcTable[data] ^ (total_checksum << 8);
+    return total_checksum;
+}
+
 unsigned int checksum( unsigned char *message){
     int byte_i;
     unsigned char data;
