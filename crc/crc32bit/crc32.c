@@ -2,9 +2,7 @@
 program contains functions used to calculate checksum for data of n bytes. 
 unsigned int crc32b(unsigned char * message) function is taken from:
 http://stackoverflow.com/questions/21001659/crc32-algorithm-implementation-in-c-without-a-look-up-table-and-with-a-public-li
-
 */
-
 
 #include<stdio.h>
 #include"crc32.h"
