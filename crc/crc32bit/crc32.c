@@ -37,6 +37,7 @@ unsigned int checksum( unsigned char *message){
     for(byte_i = 0; byte_i < message_len_byte; byte_i++){
         data = message[byte_i] ^ (total_checksum >> ( WIDTH - 8 ));
         total_checksum = crcTable[data] ^ (total_checksum << 8);
+        printf("message[%d]: byte= %04x, checksum = %04x\n", byte_i, message[byte_i], total_checksum);
     }
     return total_checksum;
 }
