@@ -30,8 +30,7 @@ finding the total checksum.
 */
 unsigned int checksum( unsigned char *message);
 
-/*same as the above function but will only find the crc for a byte. 
-can accumulate
+/*same as the above function but will only find the crc checksum for a byte. 
 */
 unsigned int checksumByte( unsigned char *message, int start_ind, unsigned int total_checksum);
 
